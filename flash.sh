@@ -36,7 +36,7 @@ fastboot flash gpt ${PRODUCT_OUT}/$(partition_table_image ${MMC_SIZE})
 fastboot reboot-bootloader
 
 # Flash filesystems
-#fastboot erase misc
-#fastboot flash boot ${PRODUCT_OUT}/boot.img
-#fastboot flash rootfs ${PRODUCT_OUT}/rootfs.img
-#fastboot reboot
+fastboot erase misc
+fastboot flash boot ${PRODUCT_OUT}/boot.img
+fastboot flash rootfs ${PRODUCT_OUT}/rootfs.img
+fastboot reboot
