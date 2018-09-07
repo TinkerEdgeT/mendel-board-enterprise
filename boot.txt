@@ -5,10 +5,6 @@ script=boot.scr
 mmc_root="PARTUUID=70672ec3-5eee-49ff-b3b1-eb1fbd406bf5"
 sd_root="/dev/mmcblk1p2"
 
-# Power down the DarwiNN
-i2c dev 0
-i2c mw 0x1f 0x24 0x25 1
-
 # Check boot device to decide which root partition to use
 if test ${bootdev} = 1; then
     setenv root ${sd_root}
