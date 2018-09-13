@@ -24,6 +24,10 @@ function partition_table_image {
     esac
 }
 
+# Flash bootloader
+fastboot flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
+fastboot reboot-bootloader
+
 # Figure out which partition map we need based upon fastboot vars
 MMC_SIZE=$(fastboot getvar mmc_size 2>&1 | awk '/mmc_size:/ { print $2 }')
 PART_IMAGE=$(partition_table_image ${MMC_SIZE})
@@ -32,10 +36,6 @@ if [[ -z ${PART_IMAGE} ]]; then
     echo "No partition map available for an emmc of size ${MMC_SIZE}" >/dev/stderr
     exit 1
 fi
-
-# Flash bootloader
-fastboot flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
-fastboot reboot-bootloader
 
 # Flash partition table
 fastboot flash gpt ${PRODUCT_OUT}/${PART_IMAGE}
