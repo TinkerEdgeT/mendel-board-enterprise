@@ -14,14 +14,13 @@ else
 fi
 
 function partition_table_image {
-    case $1 in
-    7818182656)
-        echo "partition-table-8gb.img" ;;
-    15634268160)
-        echo "partition-table-16gb.img" ;;
-    62537072640)
-        echo "partition-table-64gb.img" ;;
-    esac
+    if [[ $1 -gt 7000000000 ]] && [[ $1 -lt 8000000000 ]]; then
+        echo "partition-table-8gb.img"
+    elif [[ $1 -gt 14000000000 ]] && [[ $1 -lt 17000000000 ]]; then
+        echo "partition-table-16gb.img"
+    elif [[ $1 -gt 60000000000 ]]; then
+        echo "partition-table-64gb.img"
+    fi
 }
 
 # Flash bootloader
