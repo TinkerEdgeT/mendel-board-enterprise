@@ -33,7 +33,6 @@ sdcard-allocate: | $(PRODUCT_OUT)
 $(PRODUCT_OUT)/sdcard.img: sdcard-allocate \
                            $(ROOTDIR)/build/rootfs.mk \
                            $(ROOTDIR)/build/boot.mk \
-                           $(ROOTDIR)/build/u-boot.mk \
                            $(ROOTDIR)/board/fstab.sdcard \
                            | $(PRODUCT_OUT)/u-boot.imx \
                            $(PRODUCT_OUT)/boot.img \
