@@ -19,9 +19,12 @@ set -e
 ROOTDIR=$(dirname $0)/..
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Set USERSPACE_ARCH to arm64, if not set in the environment
+USERSPACE_ARCH=${USERSPACE_ARCH:=arm64}
+
 # If there's a boot.img in the same folder as flash.sh,
 # find artifacts in the directory containing the script.
-if [ -e ${SCRIPT_DIR}/boot.img ]; then
+if [ -e ${SCRIPT_DIR}/boot_${USERSPACE_ARCH}.img ]; then
     PRODUCT_OUT=${SCRIPT_DIR}
 else
     PRODUCT_OUT=${PRODUCT_OUT:=${ROOTDIR}/out/target/product/imx8m_phanbell}
@@ -56,6 +59,6 @@ fastboot reboot-bootloader
 
 # Flash filesystems
 fastboot erase misc
-fastboot flash boot ${PRODUCT_OUT}/boot.img
-fastboot flash rootfs ${PRODUCT_OUT}/rootfs.img
+fastboot flash boot ${PRODUCT_OUT}/boot_${USERSPACE_ARCH}.img
+fastboot flash rootfs ${PRODUCT_OUT}/rootfs_${USERSPACE_ARCH}.img
 fastboot reboot

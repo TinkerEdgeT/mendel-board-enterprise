@@ -22,7 +22,7 @@ bootloader: $(PRODUCT_OUT)/u-boot.imx
 
 $(PRODUCT_OUT)/u-boot.imx: uboot-imx | out-dirs
 	$(LOG) u-boot extract
-	find $(PRODUCT_OUT)/packages -name 'uboot-imx*.deb' | xargs \
+	find $(PRODUCT_OUT)/packages -name 'uboot-imx*$(USERSPACE_ARCH)*.deb' | xargs \
 	dpkg --fsys-tarfile | \
 	tar --strip-components 2 -C $(PRODUCT_OUT) -xf - ./boot/u-boot.imx
 	$(LOG) u-boot finished

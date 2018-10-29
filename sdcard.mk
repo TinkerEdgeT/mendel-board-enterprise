@@ -24,53 +24,43 @@ ROOTFS_START := $(shell echo $(BOOT_START)+$(BOOT_SIZE_MB) | bc)
 UBOOT_START := 66# Cribbed from Yocto.
 SDIMAGE_SIZE_MB := $(shell echo $(ROOTFS_START)+$(ROOTFS_SIZE_MB) | bc)
 
-sdcard: $(PRODUCT_OUT)/sdcard.img
-sdcard-xz: $(PRODUCT_OUT)/sdcard.img.xz
+SDCARD_WIP_PATH := $(PRODUCT_OUT)/sdcard_$(USERSPACE_ARCH).img.wip
+SDCARD_PATH := $(PRODUCT_OUT)/sdcard_$(USERSPACE_ARCH).img
 
-sdcard-allocate: | $(PRODUCT_OUT)
-	fallocate -l $(SDIMAGE_SIZE_MB)M $(PRODUCT_OUT)/sdcard.img
+sdcard: $(SDCARD_PATH)
+sdcard-xz: $(SDCARD_PATH).xz
 
-$(PRODUCT_OUT)/sdcard.img: sdcard-allocate \
-                           $(ROOTDIR)/build/rootfs.mk \
-                           $(ROOTDIR)/build/boot.mk \
-                           $(ROOTDIR)/board/fstab.sdcard \
-                           | $(PRODUCT_OUT)/u-boot.imx \
-                           $(PRODUCT_OUT)/boot.img \
-                           $(PRODUCT_OUT)/obj/ROOTFS/rootfs.patched.img
-	parted -s $(PRODUCT_OUT)/sdcard.img mklabel msdos
-	parted -s $(PRODUCT_OUT)/sdcard.img unit MiB mkpart primary ext2 $(BOOT_START) $(ROOTFS_START)
-	parted -s $(PRODUCT_OUT)/sdcard.img unit MiB mkpart primary ext4 $(ROOTFS_START) 100%
-	dd if=$(PRODUCT_OUT)/u-boot.imx of=$(PRODUCT_OUT)/sdcard.img conv=notrunc seek=$(UBOOT_START) bs=512
-	dd if=$(PRODUCT_OUT)/boot.img of=$(PRODUCT_OUT)/sdcard.img conv=notrunc seek=$(BOOT_START) bs=1M
-	dd if=$(PRODUCT_OUT)/obj/ROOTFS/rootfs.patched.img \
-		of=$(PRODUCT_OUT)/sdcard.img conv=notrunc seek=$(ROOTFS_START) bs=1M
-
+$(SDCARD_PATH): $(ROOTDIR)/build/rootfs.mk \
+                $(ROOTDIR)/build/boot.mk \
+                $(ROOTDIR)/board/fstab.sdcard \
+                | $(PRODUCT_OUT)/u-boot.imx \
+                $(PRODUCT_OUT)/boot_$(USERSPACE_ARCH).img \
+                $(PRODUCT_OUT)/obj/ROOTFS/rootfs_$(USERSPACE_ARCH).patched.img \
+                out-dirs
+	fallocate -l $(SDIMAGE_SIZE_MB)M $(SDCARD_WIP_PATH)
+	parted -s $(SDCARD_WIP_PATH) mklabel msdos
+	parted -s $(SDCARD_WIP_PATH) unit MiB mkpart primary ext2 $(BOOT_START) $(ROOTFS_START)
+	parted -s $(SDCARD_WIP_PATH) unit MiB mkpart primary ext4 $(ROOTFS_START) 100%
+	dd if=$(PRODUCT_OUT)/u-boot.imx of=$(SDCARD_WIP_PATH) conv=notrunc seek=$(UBOOT_START) bs=512
+	dd if=$(PRODUCT_OUT)/boot_$(USERSPACE_ARCH).img of=$(SDCARD_WIP_PATH) conv=notrunc seek=$(BOOT_START) bs=1M
+	dd if=$(PRODUCT_OUT)/obj/ROOTFS/rootfs_$(USERSPACE_ARCH).patched.img \
+		of=$(SDCARD_WIP_PATH) conv=notrunc seek=$(ROOTFS_START) bs=1M
 
 	mkdir -p $(ROOTFS_DIR)
 	-sudo umount $(ROOTFS_DIR)/boot
 	-sudo umount $(ROOTFS_DIR)
-	$(eval LOOP=$(shell sudo losetup --show -f $(PRODUCT_OUT)/sdcard.img))
-	-sudo partx -d $(LOOP)
-	sudo partx -a $(LOOP)
-
-	sudo mount $(LOOP)p2 $(ROOTFS_DIR)
-	sudo mount $(LOOP)p1 $(ROOTFS_DIR)/boot
-
-	sudo cp $(ROOTDIR)/board/fstab.sdcard $(ROOTFS_DIR)/etc/fstab
-
-	sudo umount $(ROOTFS_DIR)/boot
-	sudo umount $(ROOTFS_DIR)
-	sudo partx -d $(LOOP)
-	sudo losetup -d $(LOOP)
+	$(shell $(ROOTDIR)/board/make_sdcard.sh $(ROOTFS_DIR) $(SDCARD_WIP_PATH) $(ROOTDIR))
 	rmdir $(ROOTFS_DIR)
 
-$(PRODUCT_OUT)/sdcard.img.xz: $(PRODUCT_OUT)/sdcard.img
-	xz -k -T0 -0 $(PRODUCT_OUT)/sdcard.img
+	mv $(SDCARD_WIP_PATH) $(SDCARD_PATH)
+
+$(SDCARD_PATH).xz: $(SDCARD_PATH)
+	xz -k -T0 -0 $(SDCARD_PATH)
 
 targets::
 	@echo "sdcard     - generate a flashable sdcard image"
 
 clean::
-	rm -f $(PRODUCT_OUT)/sdcard.img $(PRODUCT_OUT)/sdcard.img.xz
+	rm -f $(PRODUCT_OUT)/sdcard_*.img $(PRODUCT_OUT)/sdcard_*.img.xz
 
 .PHONY:: sdcard sdcard-xz
