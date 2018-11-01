@@ -49,7 +49,7 @@ $(SDCARD_PATH): $(ROOTDIR)/build/rootfs.mk \
 	mkdir -p $(ROOTFS_DIR)
 	-sudo umount $(ROOTFS_DIR)/boot
 	-sudo umount $(ROOTFS_DIR)
-	$(shell $(ROOTDIR)/board/make_sdcard.sh $(ROOTFS_DIR) $(SDCARD_WIP_PATH) $(ROOTDIR))
+	$(ROOTDIR)/board/make_sdcard.sh $(ROOTFS_DIR) $(SDCARD_WIP_PATH) $(ROOTDIR)
 	rmdir $(ROOTFS_DIR)
 
 	mv $(SDCARD_WIP_PATH) $(SDCARD_PATH)
