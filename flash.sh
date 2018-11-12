@@ -19,6 +19,11 @@ set -e
 ROOTDIR=$(dirname $0)/..
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+FASTBOOT_CMD="fastboot"
+if [[ -n ${SERIAL} ]]; then
+   FASTBOOT_CMD="fastboot -s ${SERIAL}"
+fi
+
 # Set USERSPACE_ARCH to arm64, if not set in the environment
 USERSPACE_ARCH=${USERSPACE_ARCH:=arm64}
 
@@ -41,11 +46,11 @@ function partition_table_image {
 }
 
 # Flash bootloader
-fastboot flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
-fastboot reboot-bootloader
+${FASTBOOT_CMD} flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
+${FASTBOOT_CMD} reboot-bootloader
 
 # Figure out which partition map we need based upon fastboot vars
-MMC_SIZE=$(fastboot getvar mmc_size 2>&1 | awk '/mmc_size:/ { print $2 }')
+MMC_SIZE=$(${FASTBOOT_CMD} getvar mmc_size 2>&1 | awk '/mmc_size:/ { print $2 }')
 PART_IMAGE=$(partition_table_image ${MMC_SIZE})
 
 if [[ -z ${PART_IMAGE} ]]; then
@@ -54,11 +59,11 @@ if [[ -z ${PART_IMAGE} ]]; then
 fi
 
 # Flash partition table
-fastboot flash gpt ${PRODUCT_OUT}/${PART_IMAGE}
-fastboot reboot-bootloader
+${FASTBOOT_CMD} flash gpt ${PRODUCT_OUT}/${PART_IMAGE}
+${FASTBOOT_CMD} reboot-bootloader
 
 # Flash filesystems
-fastboot erase misc
-fastboot flash boot ${PRODUCT_OUT}/boot_${USERSPACE_ARCH}.img
-fastboot flash rootfs ${PRODUCT_OUT}/rootfs_${USERSPACE_ARCH}.img
-fastboot reboot
+${FASTBOOT_CMD} erase misc
+${FASTBOOT_CMD} flash boot ${PRODUCT_OUT}/boot_${USERSPACE_ARCH}.img
+${FASTBOOT_CMD} flash rootfs ${PRODUCT_OUT}/rootfs_${USERSPACE_ARCH}.img
+${FASTBOOT_CMD} reboot
