@@ -16,12 +16,9 @@ BSP_BASE_PACKAGES := \
 	aiy-board-audio \
 	aiy-board-tools \
 	aiy-board-wlan \
+	edgetpu-api \
 	linux-image-4.9.51-aiy \
 	uboot-imx
-
-ifeq ($(IS_EXTERNAL),)
-BSP_BASE_PACKAGES += edgetpu-api
-endif
 
 BSP_GUI_PACKAGES := \
 	imx-gpu-viv \
