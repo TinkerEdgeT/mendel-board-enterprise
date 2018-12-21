@@ -45,6 +45,10 @@ function partition_table_image {
     fi
 }
 
+for i in u-boot.imx ${PART_IMAGE} boot_${USERSPACE_ARCH}.img rootfs_${USERSPACE_ARCH}.img; do
+    [[ ! -f ${PRODUCT_OUT}/$i ]] && die "${PRODUCT_OUT}/$i is missing."
+done
+
 # Flash bootloader
 ${FASTBOOT_CMD} flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
 ${FASTBOOT_CMD} reboot-bootloader
