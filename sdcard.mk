@@ -31,7 +31,7 @@ sdcard: $(SDCARD_PATH)
 sdcard-xz: $(SDCARD_PATH).xz
 
 $(SDCARD_PATH): $(ROOTDIR)/build/rootfs.mk \
-                $(ROOTDIR)/build/boot.mk \
+                $(ROOTDIR)/board/boot.mk \
                 $(ROOTDIR)/board/fstab.sdcard \
                 | $(PRODUCT_OUT)/u-boot.imx \
                 $(PRODUCT_OUT)/boot_$(USERSPACE_ARCH).img \
