@@ -32,5 +32,5 @@ $(eval $(call make-pbuilder-bsp-package-target,imx-gst1.0-plugin,imx-gst1.0-plug
 	imx-vpuwrap imx-gst-plugins-bad))
 $(eval $(call make-pbuilder-bsp-package-target,aiy-board-audio,packages/aiy-board-audio))
 $(eval $(call make-pbuilder-bsp-package-target,aiy-board-tools,packages/aiy-board-tools))
-$(eval $(call make-pbuilder-bsp-package-target,aiy-board-wlan,packages/aiy-board-wlan))
+$(eval $(call make-pbuilder-bsp-package-target,imx-board-wlan,packages/imx-board-wlan))
 $(eval $(call make-pbuilder-bsp-package-target,bluez-imx,bluez-imx))
