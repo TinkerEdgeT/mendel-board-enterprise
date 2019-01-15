@@ -45,13 +45,9 @@ function partition_table_image {
     fi
 }
 
-for i in u-boot.imx ${PART_IMAGE} boot_${USERSPACE_ARCH}.img rootfs_${USERSPACE_ARCH}.img; do
+for i in u-boot.imx boot_${USERSPACE_ARCH}.img rootfs_${USERSPACE_ARCH}.img; do
     [[ ! -f ${PRODUCT_OUT}/$i ]] && die "${PRODUCT_OUT}/$i is missing."
 done
-
-# Flash bootloader
-${FASTBOOT_CMD} flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
-${FASTBOOT_CMD} reboot-bootloader
 
 # Figure out which partition map we need based upon fastboot vars
 MMC_SIZE=$(${FASTBOOT_CMD} getvar mmc_size 2>&1 | awk '/mmc_size:/ { print $2 }')
@@ -61,6 +57,10 @@ if [[ -z ${PART_IMAGE} ]]; then
     echo "No partition map available for an emmc of size ${MMC_SIZE}" >/dev/stderr
     exit 1
 fi
+
+# Flash bootloader
+${FASTBOOT_CMD} flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
+${FASTBOOT_CMD} reboot-bootloader
 
 # Flash partition table
 ${FASTBOOT_CMD} flash gpt ${PRODUCT_OUT}/${PART_IMAGE}
