@@ -13,8 +13,8 @@
 # limitations under the License.
 
 BSP_BASE_PACKAGES := \
-	aiy-board-audio \
 	aiy-board-tools \
+	imx-board-audio \
 	imx-board-wlan \
 	edgetpu-api \
 	linux-image-4.9.51-aiy \
