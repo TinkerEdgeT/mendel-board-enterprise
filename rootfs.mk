@@ -13,8 +13,9 @@
 # limitations under the License.
 
 BSP_BASE_PACKAGES := \
-	aiy-board-tools \
 	imx-board-audio \
+	imx-board-gadget \
+	imx-board-tools \
 	imx-board-wlan \
 	linux-image-4.9.51-aiy \
 	python3-edgetpu \

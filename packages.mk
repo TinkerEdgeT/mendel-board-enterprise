@@ -13,6 +13,7 @@
 # limitations under the License.
 
 $(eval $(call make-pbuilder-bsp-package-target,imx-atf,imx-atf))
+$(eval $(call make-pbuilder-bsp-package-target,imx-board-gadget,packages/imx-board-gadget))
 $(eval $(call make-pbuilder-bsp-package-target,imx-firmware,imx-firmware))
 $(eval $(call make-pbuilder-bsp-package-target,imx-mkimage,tools/imx-mkimage))
 $(eval $(call make-pbuilder-bsp-package-target,uboot-imx,uboot-imx,imx-atf imx-firmware imx-mkimage))
@@ -30,7 +31,7 @@ $(eval $(call make-pbuilder-bsp-package-target,imx-gst-plugins-bad,imx-gst-plugi
 	libdrm-imx imx-gst-plugins-base linux-imx))
 $(eval $(call make-pbuilder-bsp-package-target,imx-gst1.0-plugin,imx-gst1.0-plugin,\
 	imx-vpuwrap imx-gst-plugins-bad))
-$(eval $(call make-pbuilder-bsp-package-target,aiy-board-tools,packages/aiy-board-tools))
+$(eval $(call make-pbuilder-bsp-package-target,imx-board-tools,packages/imx-board-tools))
 $(eval $(call make-pbuilder-bsp-package-target,imx-board-audio,packages/imx-board-audio))
 $(eval $(call make-pbuilder-bsp-package-target,imx-board-wlan,packages/imx-board-wlan))
 $(eval $(call make-pbuilder-bsp-package-target,bluez-imx,bluez-imx))
