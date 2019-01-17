@@ -16,8 +16,8 @@ BSP_BASE_PACKAGES := \
 	aiy-board-tools \
 	imx-board-audio \
 	imx-board-wlan \
-	edgetpu-api \
 	linux-image-4.9.51-aiy \
+	python3-edgetpu \
 	uboot-imx
 
 BSP_GUI_PACKAGES := \
