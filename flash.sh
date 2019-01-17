@@ -16,6 +16,21 @@
 
 set -e
 
+function partition_table_image {
+    if [[ $1 -gt 7000000000 ]] && [[ $1 -lt 8000000000 ]]; then
+        echo "partition-table-8gb.img"
+    elif [[ $1 -gt 14000000000 ]] && [[ $1 -lt 17000000000 ]]; then
+        echo "partition-table-16gb.img"
+    elif [[ $1 -gt 60000000000 ]]; then
+        echo "partition-table-64gb.img"
+    fi
+}
+
+function die {
+    echo "$@" >/dev/stderr
+    exit 1
+}
+
 ROOTDIR=$(dirname $0)/..
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -35,16 +50,6 @@ else
     PRODUCT_OUT=${PRODUCT_OUT:=${ROOTDIR}/out/target/product/imx8m_phanbell}
 fi
 
-function partition_table_image {
-    if [[ $1 -gt 7000000000 ]] && [[ $1 -lt 8000000000 ]]; then
-        echo "partition-table-8gb.img"
-    elif [[ $1 -gt 14000000000 ]] && [[ $1 -lt 17000000000 ]]; then
-        echo "partition-table-16gb.img"
-    elif [[ $1 -gt 60000000000 ]]; then
-        echo "partition-table-64gb.img"
-    fi
-}
-
 for i in u-boot.imx boot_${USERSPACE_ARCH}.img rootfs_${USERSPACE_ARCH}.img; do
     [[ ! -f ${PRODUCT_OUT}/$i ]] && die "${PRODUCT_OUT}/$i is missing."
 done
@@ -54,8 +59,7 @@ MMC_SIZE=$(${FASTBOOT_CMD} getvar mmc_size 2>&1 | awk '/mmc_size:/ { print $2 }'
 PART_IMAGE=$(partition_table_image ${MMC_SIZE})
 
 if [[ -z ${PART_IMAGE} ]]; then
-    echo "No partition map available for an emmc of size ${MMC_SIZE}" >/dev/stderr
-    exit 1
+    die "No partition map available for an emmc of size ${MMC_SIZE}"
 fi
 
 # Flash bootloader
