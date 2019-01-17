@@ -18,6 +18,7 @@ BSP_BASE_PACKAGES := \
 	imx-board-wlan \
 	linux-image-4.9.51-aiy \
 	python3-edgetpu \
+	python3-edgetpuvision \
 	uboot-imx
 
 BSP_GUI_PACKAGES := \
