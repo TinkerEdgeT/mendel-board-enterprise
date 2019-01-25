@@ -17,15 +17,12 @@ BSP_BASE_PACKAGES := \
 	imx-board-gadget \
 	imx-board-tools \
 	imx-board-wlan \
-	linux-image-4.9.51-aiy \
-	python3-edgetpu \
-	python3-edgetpuvision \
-	uboot-imx
-
-BSP_GUI_PACKAGES := \
 	imx-gpu-viv \
 	imx-gst1.0-plugin \
 	imx-vpu-hantro \
 	imx-vpuwrap \
 	libdrm-vivante \
-	weston-imx
+	linux-image-4.9.51-aiy \
+	python3-edgetpu \
+	python3-edgetpuvision \
+	uboot-imx
