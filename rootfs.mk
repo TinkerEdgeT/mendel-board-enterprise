@@ -17,6 +17,7 @@ BSP_BASE_PACKAGES := \
 	imx-board-gadget \
 	imx-board-tools \
 	imx-board-wlan \
+	imx-firmware \
 	imx-gpu-viv \
 	imx-gst1.0-plugin \
 	imx-vpu-hantro \
