@@ -14,7 +14,6 @@
 
 BSP_BASE_PACKAGES := \
 	imx-board-audio \
-	imx-board-gadget \
 	imx-board-tools \
 	imx-board-wlan \
 	imx-firmware \
@@ -26,4 +25,5 @@ BSP_BASE_PACKAGES := \
 	linux-image-4.9.51-aiy \
 	python3-edgetpu \
 	python3-edgetpuvision \
-	uboot-imx
+	uboot-imx \
+	usb-gadget
