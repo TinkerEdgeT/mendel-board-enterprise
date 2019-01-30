@@ -22,7 +22,7 @@ BSP_BASE_PACKAGES := \
 	imx-vpu-hantro \
 	imx-vpuwrap \
 	libdrm-vivante \
-	linux-image-4.9.51-aiy \
+	linux-image-4.9.51-imx \
 	python3-edgetpu \
 	python3-edgetpuvision \
 	uboot-imx \
