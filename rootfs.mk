@@ -25,5 +25,6 @@ BSP_BASE_PACKAGES := \
 	linux-image-4.9.51-imx \
 	python3-edgetpu \
 	python3-edgetpuvision \
+	edgetpudemo \
 	uboot-imx \
 	usb-gadget
