@@ -13,6 +13,9 @@
 # limitations under the License.
 
 BSP_BASE_PACKAGES := \
+	bluetooth \
+	bluez \
+	libbluetooth3 \
 	imx-board-audio \
 	imx-board-tools \
 	imx-board-wlan \
@@ -26,5 +29,4 @@ BSP_BASE_PACKAGES := \
 	python3-edgetpu \
 	python3-edgetpuvision \
 	edgetpudemo \
-	uboot-imx \
-	usb-gadget
+	uboot-imx
