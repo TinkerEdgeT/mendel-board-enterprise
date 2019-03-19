@@ -34,7 +34,11 @@ function die {
 ROOTDIR=$(dirname $0)/..
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-FASTBOOT_CMD="fastboot"
+FASTBOOT_CMD="$(which fastboot)"
+if [[ -z ${FASTBOOT_CMD} ]]; then
+    die "Couldn't find fastboot on your PATH -- did you install it?"
+fi
+
 if [[ -n ${SERIAL} ]]; then
    FASTBOOT_CMD="fastboot -s ${SERIAL}"
 fi
