@@ -35,3 +35,4 @@ $(eval $(call make-pbuilder-bsp-package-target,imx-board-tools,packages/imx-boar
 $(eval $(call make-pbuilder-bsp-package-target,imx-board-audio,packages/imx-board-audio))
 $(eval $(call make-pbuilder-bsp-package-target,imx-board-wlan,packages/imx-board-wlan))
 $(eval $(call make-pbuilder-bsp-package-target,bluez-imx,bluez-imx))
+$(eval $(call make-pbuilder-bsp-package-target,meta-enterprise,packages/meta-enterprise))
