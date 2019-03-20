@@ -13,7 +13,6 @@
 # limitations under the License.
 
 $(eval $(call make-pbuilder-bsp-package-target,imx-atf,imx-atf))
-$(eval $(call make-pbuilder-bsp-package-target,imx-board-gadget,packages/imx-board-gadget))
 $(eval $(call make-pbuilder-bsp-package-target,imx-firmware,imx-firmware))
 $(eval $(call make-pbuilder-bsp-package-target,imx-mkimage,tools/imx-mkimage))
 $(eval $(call make-pbuilder-bsp-package-target,uboot-imx,uboot-imx,imx-atf imx-firmware imx-mkimage))
