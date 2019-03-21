@@ -69,10 +69,12 @@ fi
 # Flash bootloader
 ${FASTBOOT_CMD} flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
 ${FASTBOOT_CMD} reboot-bootloader
+sleep 3
 
 # Flash partition table
 ${FASTBOOT_CMD} flash gpt ${PRODUCT_OUT}/${PART_IMAGE}
 ${FASTBOOT_CMD} reboot-bootloader
+sleep 3
 
 # Flash filesystems
 ${FASTBOOT_CMD} erase misc
