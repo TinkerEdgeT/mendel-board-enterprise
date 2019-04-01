@@ -19,6 +19,7 @@ endif
 include $(ROOTDIR)/build/preamble.mk
 
 bootloader: $(PRODUCT_OUT)/u-boot.imx
+mkimage: $(HOST_OUT)/bin/mkimage
 
 $(PRODUCT_OUT)/u-boot.imx: uboot-imx | out-dirs
 	$(LOG) u-boot extract
@@ -27,4 +28,9 @@ $(PRODUCT_OUT)/u-boot.imx: uboot-imx | out-dirs
 	tar --strip-components 2 -C $(PRODUCT_OUT) -xf - ./boot/u-boot.imx
 	$(LOG) u-boot finished
 
-.PHONY:: bootloader
+$(HOST_OUT)/bin/mkimage: uboot-imx | out-dirs
+	find $(PRODUCT_OUT)/packages -name 'uboot-mkimage*.deb' | xargs \
+	dpkg --fsys-tarfile | \
+	tar --strip-components 3 -C $(HOST_OUT)/bin -xf - ./usr/bin/mkimage
+
+.PHONY:: bootloader mkimage

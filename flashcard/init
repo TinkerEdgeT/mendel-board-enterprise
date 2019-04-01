@@ -1,0 +1,35 @@
+#!/bin/busybox sh
+set -x
+# set -e
+
+function partition_table_image {                                                                                                           
+     if [[ $1 -gt 7000000000 ]] && [[ $1 -lt 8000000000 ]]; then                                                                            
+         echo "partition-table-8gb.img"                                                                                                     
+     elif [[ $1 -gt 14000000000 ]] && [[ $1 -lt 17000000000 ]]; then                                                                        
+         echo "partition-table-16gb.img"                                                                                                    
+     elif [[ $1 -gt 60000000000 ]]; then                                                                                                    
+         echo "partition-table-64gb.img"                                                                                                    
+     fi                                                                                                                                     
+}
+
+exec 0</dev/ttymxc0
+exec 1>/dev/ttymxc0
+exec 2>/dev/ttymxc0
+/bin/busybox --install -s
+mount -n -t devtmpfs devtmpfs /dev
+mount -n -t proc proc /proc
+mount -n -t sysfs sysfs /sys
+mkdir -p /tmp/sdcard
+mount /dev/mmcblk1p1 /tmp/sdcard
+
+PARTITION_SIZE=$(echo $(cat /sys/class/block/mmcblk0/size) \* 512 | bc)
+PARTITION_IMAGE=$(partition_table_image ${PARTITION_SIZE})
+
+dd if=/tmp/sdcard/${PARTITION_IMAGE} of=/dev/mmcblk0
+partprobe /dev/mmcblk0
+echo 0 > /sys/block/mmcblk0boot0/force_ro
+dd if=/tmp/sdcard/u-boot.imx of=/dev/mmcblk0boot0 bs=512 seek=66
+dd if=/tmp/sdcard/boot.img of=/dev/mmcblk0p1
+dd if=/tmp/sdcard/rootfs.img of=/dev/mmcblk0p3
+echo "Finished flashing the system!"
+exec /bin/busybox init $*
