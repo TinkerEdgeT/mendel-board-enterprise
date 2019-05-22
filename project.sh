@@ -16,4 +16,5 @@
 
 export PROJECT_NAME=imx8m_phanbell
 export PLATFORM=imx
+export BOARD_NAME=enterprise
 
