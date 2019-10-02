@@ -73,6 +73,20 @@ try ${FASTBOOT_CMD} flash bootloader0 ${PRODUCT_OUT}/u-boot.imx
 try ${FASTBOOT_CMD} reboot-bootloader
 sleep 3
 
+# Check to see if HOME existed before we clobber the GPT
+HOME_MISSING=$(${FASTBOOT_CMD} getvar partition-type:home 2>&1 |grep -q FAILED && echo true)
+if [[ "${HOME_MISSING}" == "true" ]]; then
+    echo "*** home partition is missing -- will flash home partition"
+else
+    echo -n "*** home partition present; "
+
+    if [[ "$1" == "--clobber-home" ]]; then
+        echo "--clobber-home specified. WILL flash home partition"
+    else
+        echo "WILL NOT flash home partition"
+    fi
+fi
+
 # Flash partition table
 try ${FASTBOOT_CMD} flash gpt ${PRODUCT_OUT}/${PART_IMAGE}
 try ${FASTBOOT_CMD} reboot-bootloader
@@ -80,6 +94,13 @@ sleep 3
 
 # Flash filesystems
 try ${FASTBOOT_CMD} erase misc
+
+# If home was present before we stuffed in the new GPT, only clobber
+# if the user asked for it.
+if [[ "${HOME_MISSING}" == "true" ]] || [[ "$1" == "--clobber-home" ]] ; then
+    try ${FASTBOOT_CMD} flash home ${PRODUCT_OUT}/home.img
+fi
+
 try ${FASTBOOT_CMD} flash boot ${PRODUCT_OUT}/boot_${USERSPACE_ARCH}.img
 try ${FASTBOOT_CMD} flash rootfs ${PRODUCT_OUT}/rootfs_${USERSPACE_ARCH}.img
 try ${FASTBOOT_CMD} reboot

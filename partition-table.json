@@ -19,12 +19,19 @@
       "position": 2
     },
     {
+      "label": "home",
+      "size": "2 GiB",
+      "guid": "auto",
+      "type_guid": "brillo_userdata",
+      "position": 3
+    },
+    {
       "label": "rootfs",
       "size": "2 GiB",
       "grow": true,
       "guid": "70672ec3-5eee-49ff-b3b1-eb1fbd406bf5",
       "type_guid": "brillo_system",
-      "position": 3
+      "position": 4
     }
   ]
 }
