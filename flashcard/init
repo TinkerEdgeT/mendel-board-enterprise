@@ -1,5 +1,5 @@
 #!/bin/busybox sh
-set -x
+#set -x
 # set -e
 
 function partition_table_image {                                                                                                           
@@ -10,6 +10,11 @@ function partition_table_image {
      elif [[ $1 -gt 60000000000 ]]; then                                                                                                    
          echo "partition-table-64gb.img"                                                                                                    
      fi                                                                                                                                     
+}
+
+function log {
+     echo "$@"
+     echo "$@" > /dev/tty1
 }
 
 exec 0</dev/ttymxc0
@@ -25,11 +30,36 @@ mount /dev/mmcblk1p1 /tmp/sdcard
 PARTITION_SIZE=$(echo $(cat /sys/class/block/mmcblk0/size) \* 512 | bc)
 PARTITION_IMAGE=$(partition_table_image ${PARTITION_SIZE})
 
+log
+log "=== FLASH START! ==="
+
+log "* Writing partition table"
 dd if=/tmp/sdcard/${PARTITION_IMAGE} of=/dev/mmcblk0
 partprobe /dev/mmcblk0
 echo 0 > /sys/block/mmcblk0boot0/force_ro
+
+log "* Writing bootloader..."
 dd if=/tmp/sdcard/u-boot.imx of=/dev/mmcblk0boot0 bs=512 seek=66
+
+log "* Writing boot filesystem..."
 dd if=/tmp/sdcard/boot.img of=/dev/mmcblk0p1
+
+log "* Writing root filesystem..."
 dd if=/tmp/sdcard/rootfs.img of=/dev/mmcblk0p3
-echo "Finished flashing the system!"
-exec /bin/busybox init $*
+
+log "=== FLASH END! ==="
+sync
+sync
+sync
+
+log
+log "==============================================================="
+log "Powering down the system. Please remove the SD card, change the"
+log "boot switches to boot from the internal eMMC (should be set to"
+log "on-off-off-off), remove and reconnect power."
+log "==============================================================="
+log
+log "Board will power down in 10 seconds..."
+sleep 10
+poweroff
+
