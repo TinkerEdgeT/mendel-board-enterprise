@@ -44,6 +44,9 @@ dd if=/tmp/sdcard/u-boot.imx of=/dev/mmcblk0boot0 bs=512 seek=66
 log "* Writing boot filesystem..."
 dd if=/tmp/sdcard/boot.img of=/dev/mmcblk0p1
 
+log "* Writing home filesystem..."
+dd if=/tmp/sdcard/home.img of=/dev/mmcblk0p3
+
 log "* Writing root filesystem..."
 dd if=/tmp/sdcard/rootfs.img of=/dev/mmcblk0p4
 

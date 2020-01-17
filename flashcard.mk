@@ -31,7 +31,7 @@ FLASHCARD_BOOT_MOUNT_PATH := $(FLASHCARD_WORK_DIR)/mount_boot
 flashcard: $(FLASHCARD_PATH)
 
 $(FLASHCARD_PATH): $(ROOTDIR)/board/flashcard/init $(ROOTDIR)/board/flashcard/boot.txt multistrap | \
-                   busybox partition-table $(PRODUCT_OUT)/u-boot.imx $(HOST_OUT)/bin/mkimage
+                   busybox partition-table $(PRODUCT_OUT)/u-boot.imx $(HOST_OUT)/bin/mkimage home_raw
 	# TODO(math the size)
 	-rm -rf $(FLASHCARD_WORK_DIR)
 	mkdir -p $(FLASHCARD_WORK_DIR)
@@ -90,6 +90,7 @@ $(FLASHCARD_PATH): $(ROOTDIR)/board/flashcard/init $(ROOTDIR)/board/flashcard/bo
 	cp $(PRODUCT_OUT)/u-boot.imx $(FLASHCARD_MOUNT_PATH)
 	cp $(PRODUCT_OUT)/multistrap/boot_$(USERSPACE_ARCH).img $(FLASHCARD_MOUNT_PATH)/boot.img
 	cp $(PRODUCT_OUT)/multistrap/rootfs_$(USERSPACE_ARCH).img.wip $(FLASHCARD_MOUNT_PATH)/rootfs.img
+	cp $(PRODUCT_OUT)/obj/HOME/home.raw.img $(FLASHCARD_MOUNT_PATH)/home.img
 
 	sudo umount $(FLASHCARD_BOOT_MOUNT_PATH)
 	sudo umount $(FLASHCARD_MOUNT_PATH)
