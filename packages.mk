@@ -24,7 +24,7 @@ $(eval $(call make-pbuilder-bsp-package-target,libdrm-imx,libdrm-imx))
 $(eval $(call make-pbuilder-bsp-package-target,imx-vpu-hantro,imx-vpu-hantro,linux-imx,,binary))
 $(eval $(call make-pbuilder-bsp-package-target,imx-vpuwrap,imx-vpuwrap,imx-vpu-hantro,,binary))
 $(eval $(call make-pbuilder-bsp-package-target,imx-gstreamer,imx-gstreamer))
-$(eval $(call make-pbuilder-bsp-package-target,imx-gst-plugins-base,imx-gst-plugins-base,imx-gstreamer linux-imx,,,native))
+$(eval $(call make-pbuilder-bsp-package-target,imx-gst-plugins-base,imx-gst-plugins-base,imx-gstreamer linux-imx,,,$(USERSPACE_ARCH))))
 $(eval $(call make-pbuilder-bsp-package-target,gst-plugins-ugly1.0,packages/gst-plugins-ugly1.0,imx-gst-plugins-base))
 $(eval $(call make-pbuilder-bsp-package-target,imx-gst-plugins-good,imx-gst-plugins-good,imx-gst-plugins-base libdrm-imx))
 $(eval $(call make-pbuilder-bsp-package-target,imx-gst-plugins-bad,imx-gst-plugins-bad,\
