@@ -63,6 +63,5 @@ log "on-off-off-off), remove and reconnect power."
 log "==============================================================="
 log
 log "Board will power down in 10 seconds..."
-sleep 10
-poweroff
-sleep 100000
+poweroff -d 10 -f
+
