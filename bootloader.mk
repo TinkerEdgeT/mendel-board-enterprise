@@ -25,10 +25,10 @@ fetch-uboot:
 	$(LOG) u-boot fetch
 	wget -P $(PRODUCT_OUT)/packages \
 		-e robots=off -nv -A deb -r -np -nd \
-		https://mendel-linux.org/apt/$(RELEASE)-bsp-enterprise/pool/main/u/uboot-imx/
+		https://mendel-linux.org/apt/$(RELEASE_NAME)-bsp-enterprise/pool/main/u/uboot-imx/
 	$(LOG) u-boot fetch finished
 
-ifeq ($(IN_JENKINS),)
+ifeq ($(IS_JENKINS),)
 $(PRODUCT_OUT)/u-boot.imx: uboot-imx | out-dirs
 else
 $(PRODUCT_OUT)/u-boot.imx: fetch-uboot | out-dirs
@@ -39,7 +39,11 @@ endif
 	tar --strip-components 2 -C $(PRODUCT_OUT) -xf - ./boot/u-boot.imx
 	$(LOG) u-boot finished
 
+ifeq ($(IS_JENKINS),)
 $(HOST_OUT)/bin/mkimage: uboot-imx | out-dirs
+else
+$(HOST_OUT)/bin/mkimage: fetch-uboot | out-dirs
+endif
 	find $(PRODUCT_OUT)/packages -name 'uboot-mkimage*.deb' | xargs \
 	dpkg --fsys-tarfile | \
 	tar --strip-components 3 -C $(HOST_OUT)/bin -xf - ./usr/bin/mkimage
