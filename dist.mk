@@ -30,9 +30,11 @@ DIST_FILES      := \
 	$(PRODUCT_OUT)/partition-table-64gb.img \
 	$(PRODUCT_OUT)/partition-table-16gb.img \
 	$(PRODUCT_OUT)/partition-table-8gb.img \
+	$(PRODUCT_OUT)/recovery.img \
 	$(PRODUCT_OUT)/rootfs_arm64.img \
 	$(PRODUCT_OUT)/u-boot.imx \
-	$(ROOTDIR)/board/flash.sh
+	$(ROOTDIR)/board/flash.sh \
+	$(ROOTDIR)/board/README
 
 package-images: $(DIST_ZIPNAME)
 sign-images: $(DIST_SHA256NAME)
