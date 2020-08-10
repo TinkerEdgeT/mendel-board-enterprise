@@ -36,3 +36,4 @@ $(eval $(call make-pbuilder-bsp-package-target,imx-board-audio,packages/imx-boar
 $(eval $(call make-pbuilder-bsp-package-target,imx-board-wlan,imx-board-wlan,linux-imx))
 $(eval $(call make-pbuilder-bsp-package-target,bluez-imx,bluez-imx))
 $(eval $(call make-pbuilder-bsp-package-target,meta-enterprise,packages/meta-enterprise))
+$(eval $(call make-pbuilder-bsp-package-target,enterprise-testing-tools,mendel-testing-tools,imx-gpu-viv))
