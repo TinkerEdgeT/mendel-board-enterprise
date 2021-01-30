@@ -45,6 +45,7 @@ $(HOST_OUT)/bin/mkimage: uboot-imx | out-dirs
 else
 $(HOST_OUT)/bin/mkimage: fetch-uboot | out-dirs
 endif
+	mkdir -p $(HOST_OUT)/bin
 	find $(PRODUCT_OUT)/packages -name 'uboot-mkimage*.deb' | \
 	sort -n | tail -1 | xargs \
 	dpkg --fsys-tarfile | \
