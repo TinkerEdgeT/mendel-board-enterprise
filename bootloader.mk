@@ -34,7 +34,8 @@ else
 $(PRODUCT_OUT)/u-boot.imx: fetch-uboot | out-dirs
 endif
 	$(LOG) u-boot extract
-	find $(PRODUCT_OUT)/packages -name 'uboot-imx*$(USERSPACE_ARCH)*.deb' | xargs \
+	find $(PRODUCT_OUT)/packages -name 'uboot-imx*$(USERSPACE_ARCH)*.deb' | \
+	sort -n | tail -1 | xargs \
 	dpkg --fsys-tarfile | \
 	tar --strip-components 2 -C $(PRODUCT_OUT) -xf - ./boot/u-boot.imx
 	$(LOG) u-boot finished
@@ -44,7 +45,9 @@ $(HOST_OUT)/bin/mkimage: uboot-imx | out-dirs
 else
 $(HOST_OUT)/bin/mkimage: fetch-uboot | out-dirs
 endif
-	find $(PRODUCT_OUT)/packages -name 'uboot-mkimage*.deb' | xargs \
+	mkdir -p $(HOST_OUT)/bin
+	find $(PRODUCT_OUT)/packages -name 'uboot-mkimage*.deb' | \
+	sort -n | tail -1 | xargs \
 	dpkg --fsys-tarfile | \
 	tar --strip-components 3 -C $(HOST_OUT)/bin -xf - ./usr/bin/mkimage
 

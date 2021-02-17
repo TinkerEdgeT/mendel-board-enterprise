@@ -23,6 +23,9 @@ DISTDIR         := $(PRODUCT_OUT)/dist
 DIST_BASENAME   := enterprise-$(RELEASE_NAME)-$(DATESTAMP)
 DIST_ZIPNAME    := $(DISTDIR)/$(DIST_BASENAME).zip
 DIST_SHA256NAME := $(DISTDIR)/$(DIST_BASENAME).sha256
+DIST_SD_BASENAME:= enterprise-$(RELEASE_NAME)-flashcard-$(DATESTAMP)
+DIST_SD_ZIPNAME := $(DISTDIR)/$(DIST_SD_BASENAME).zip
+DIST_SD_SHA256NAME := $(DISTDIR)/$(DIST_SD_BASENAME).sha256
 
 DIST_FILES      := \
 	$(PRODUCT_OUT)/boot_arm64.img \
@@ -36,12 +39,18 @@ DIST_FILES      := \
 	$(ROOTDIR)/board/flash.sh \
 	$(ROOTDIR)/board/README
 
+DIST_SD_FILES   := \
+	$(PRODUCT_OUT)/flashcard_arm64.img
+
 package-images: $(DIST_ZIPNAME)
 sign-images: $(DIST_SHA256NAME)
+package-sd-image: $(DIST_SD_ZIPNAME)
+sign-sd-image: $(DIST_SD_SHA256NAME)
 
 dirs:
 	mkdir -p $(PRODUCT_OUT)/obj/DIST
 	mkdir -p $(PRODUCT_OUT)/obj/DIST/$(DIST_BASENAME)
+	mkdir -p $(PRODUCT_OUT)/obj/DIST/$(DIST_SD_BASENAME)
 	mkdir -p $(DISTDIR)
 
 $(DIST_ZIPNAME): $(DIST_FILES) dirs
@@ -51,4 +60,11 @@ $(DIST_ZIPNAME): $(DIST_FILES) dirs
 $(DIST_SHA256NAME): $(DIST_ZIPNAME) | dirs
 	sha256sum $(DIST_ZIPNAME) > $(DIST_SHA256NAME)
 
-.PHONY:: package-images sign-images dirs
+$(DIST_SD_ZIPNAME): $(DIST_SD_FILES) dirs
+	cp $(DIST_SD_FILES) $(PRODUCT_OUT)/obj/DIST/$(DIST_SD_BASENAME)
+	pushd $(PRODUCT_OUT)/obj/DIST; zip -9r $(DIST_SD_ZIPNAME) $(DIST_SD_BASENAME); popd
+
+$(DIST_SD_SHA256NAME): $(DIST_SD_ZIPNAME) | dirs
+	sha256sum $(DIST_SD_ZIPNAME) > $(DIST_SD_SHA256NAME)
+
+.PHONY:: package-images sign-images package-sd-image sign-sd-image dirs
